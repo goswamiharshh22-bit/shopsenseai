@@ -1,3 +1,6 @@
+exports.getDashboardData = async (req, res) => {
+  // your dashboard logic
+};
 const Product = require("../models/Product");
 
 const getDashboard = async (req, res) => {

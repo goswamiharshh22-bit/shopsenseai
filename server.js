@@ -1,3 +1,6 @@
+const dashboardRoutes = require("./routes/dashboardRoutes");
+
+app.use("/api/dashboard", dashboardRoutes);
 const dotenv = require("dotenv");
 dotenv.config();
 
