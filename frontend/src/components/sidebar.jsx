@@ -9,7 +9,7 @@ import {
 
 import { NavLink } from "react-router-dom";
 
-function Sidebar() {
+function sidebar() {
   const menuItems = [
     {
       name: "Dashboard",

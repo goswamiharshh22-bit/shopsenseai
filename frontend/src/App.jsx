@@ -1,7 +1,7 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 
-import Sidebar from "./components/Sidebar";
+import sidebar from "./components/sidebar";
 
 import Dashboard from "./pages/Dashboard";
 import Customers from "./pages/Customers";
