@@ -2,9 +2,17 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  seedData
+  addConsumer,
+  getConsumers,
+  getConsumer,
+  updateConsumer,
+  deleteConsumer,
 } = require("../controllers/consumerController");
 
-router.post("/seed", seedData);
+router.post("/", addConsumer);
+router.get("/", getConsumers);
+router.get("/:id", getConsumer);
+router.put("/:id", updateConsumer);
+router.delete("/:id", deleteConsumer);
 
 module.exports = router;

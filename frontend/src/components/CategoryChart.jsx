@@ -1,63 +1,71 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 import {
-  PieChart,
-  Pie,
-  Cell,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { name: "Electronics", value: 400 },
-  { name: "Fashion", value: 300 },
-  { name: "Groceries", value: 200 },
-  { name: "Books", value: 100 },
-];
+function CategoryChart() {
+  const [categories, setCategories] = useState([]);
 
-const COLORS = [
-  "#8B5CF6",
-  "#3B82F6",
-  "#10B981",
-  "#F59E0B",
-];
+  useEffect(() => {
+    fetchCategorySales();
+  }, []);
 
-export default function CategoryChart() {
+  const fetchCategorySales = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/trends");
+
+      const formattedData = res.data.categorySales.map((item) => ({
+        category: item._id,
+        sales: item.totalSales,
+      }));
+
+      setCategories(formattedData);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div
+      className="card"
       style={{
-        background: "#1F2937",
-        borderRadius: "15px",
-        padding: "25px",
-        flex: 1,
+        height: "420px",
       }}
     >
       <h2
         style={{
-          color: "white",
           marginBottom: "20px",
         }}
       >
-        Category Distribution
+        Category Sales
       </h2>
 
-      <ResponsiveContainer width="100%" height={300}>
-        <PieChart>
-          <Pie
-            data={data}
-            dataKey="value"
-            outerRadius={100}
-            label
-          >
-            {data.map((entry, index) => (
-              <Cell
-                key={index}
-                fill={COLORS[index % COLORS.length]}
-              />
-            ))}
-          </Pie>
+      <ResponsiveContainer width="100%" height="90%">
+        <BarChart data={categories}>
+          <CartesianGrid strokeDasharray="3 3" />
+
+          <XAxis dataKey="category" />
+
+          <YAxis />
 
           <Tooltip />
-        </PieChart>
+
+          <Bar
+            dataKey="sales"
+            radius={[8, 8, 0, 0]}
+          />
+        </BarChart>
       </ResponsiveContainer>
     </div>
   );
 }
+
+export default CategoryChart;

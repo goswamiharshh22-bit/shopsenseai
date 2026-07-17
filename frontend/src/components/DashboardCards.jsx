@@ -1,69 +1,72 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 import {
-  FaShoppingCart,
   FaUsers,
-  FaDollarSign,
   FaBox,
+  FaShoppingCart,
+  FaRupeeSign,
 } from "react-icons/fa";
 
-const cards = [
-  {
-    title: "Revenue",
-    value: "$12,500",
-    icon: <FaDollarSign />,
-    color: "#10B981",
-  },
-  {
-    title: "Orders",
-    value: "480",
-    icon: <FaShoppingCart />,
-    color: "#3B82F6",
-  },
-  {
-    title: "Products",
-    value: "132",
-    icon: <FaBox />,
-    color: "#F59E0B",
-  },
-  {
-    title: "Customers",
-    value: "890",
-    icon: <FaUsers />,
-    color: "#8B5CF6",
-  },
-];
+import Statcard from "./Statcard";
 
-export default function DashboardCards() {
+function DashboardCards() {
+  const [dashboard, setDashboard] = useState({
+    totalCustomers: 0,
+    totalProducts: 0,
+    totalSales: 0,
+    totalRevenue: 0,
+  });
+
+  useEffect(() => {
+    fetchDashboard();
+  }, []);
+
+  const fetchDashboard = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:5000/api/dashboard"
+      );
+
+      setDashboard(res.data.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(4,1fr)",
-        gap: "20px",
-      }}
-    >
-      {cards.map((card) => (
-        <div
-          key={card.title}
-          style={{
-            background: "#1F2937",
-            borderRadius: "15px",
-            padding: "25px",
-          }}
-        >
-          <div
-            style={{
-              color: card.color,
-              fontSize: "28px",
-            }}
-          >
-            {card.icon}
-          </div>
+    <div className="dashboard-cards">
 
-          <h3>{card.title}</h3>
+      <Statcard
+        title="Customers"
+        value={dashboard.totalCustomers}
+        bgClass="blue"
+        icon={<FaUsers />}
+      />
 
-          <h1>{card.value}</h1>
-        </div>
-      ))}
+      <Statcard
+        title="Products"
+        value={dashboard.totalProducts}
+        bgClass="green"
+        icon={<FaBox />}
+      />
+
+      <Statcard
+        title="Sales"
+        value={dashboard.totalSales}
+        bgClass="orange"
+        icon={<FaShoppingCart />}
+      />
+
+      <Statcard
+        title="Revenue"
+        value={`₹${dashboard.totalRevenue}`}
+        bgClass="purple"
+        icon={<FaRupeeSign />}
+      />
+
     </div>
   );
 }
+
+export default DashboardCards;

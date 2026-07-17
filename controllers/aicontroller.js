@@ -1,64 +1,110 @@
 const Product = require("../models/Product");
+const Customer = require("../models/Customer");
+const { generateInsights } = require("../services/geminiService");
 
 const getAIInsights = async (req, res) => {
-  try {
-    const products = await Product.find();
+  console.log("✅ AI endpoint hit");
 
-    if (products.length === 0) {
+  try {
+    const [products, customers] = await Promise.all([
+      Product.find(),
+      Customer.find({ "purchases.0": { $exists: true } }),
+    ]);
+
+    if (products.length === 0 && customers.length === 0) {
       return res.json({
         success: true,
-        insights: [
-          "No products available.",
-          "Please add products to generate AI insights."
-        ]
+        insight: "No sales data available. Add a product or save a customer purchase first.",
       });
     }
 
-    // Total Revenue
+    // Calculate Total Revenue
     const totalRevenue = products.reduce(
       (sum, p) => sum + p.price * p.quantity,
       0
     );
 
-    // Best Selling Product
-    const bestProduct = products.reduce((a, b) =>
-      a.sales > b.sales ? a : b
+    // Calculate Total Sales
+    const totalSales = products.reduce(
+      (sum, p) => sum + p.sales,
+      0
     );
+
+    // Best Selling Product
+    const bestProduct = products.length
+      ? products.reduce((a, b) => (a.sales > b.sales ? a : b))
+      : null;
 
     // Category-wise Sales
     const categorySales = {};
 
-    products.forEach((p) => {
-      categorySales[p.category] =
-        (categorySales[p.category] || 0) + p.sales;
+    products.forEach((product) => {
+      categorySales[product.category] =
+        (categorySales[product.category] || 0) + product.sales;
     });
 
-    const bestCategory = Object.keys(categorySales).reduce((a, b) =>
-      categorySales[a] > categorySales[b] ? a : b
+    // Best Category
+    const bestCategory = Object.keys(categorySales).length
+      ? Object.keys(categorySales).reduce((a, b) =>
+        categorySales[a] > categorySales[b] ? a : b
+      )
+      : "No inventory data";
+
+    const purchases = customers.flatMap((customer) =>
+      customer.purchases.map((purchase) => ({
+        customerAge: customer.age,
+        gender: customer.gender,
+        averageSpending: customer.averageSpending,
+        ...purchase.toObject(),
+      }))
     );
+    const purchaseRevenue = purchases.reduce((sum, purchase) => sum + purchase.amount, 0);
 
-    const insights = [
-      `Total Revenue is ₹${totalRevenue.toLocaleString()}.`,
-      `${bestCategory} is the highest-selling category.`,
-      `${bestProduct.productName} is the best-selling product with ${bestProduct.sales} sales.`,
-      "Increase stock for top-selling products.",
-      "Offer discounts on low-selling products.",
-      "Launch promotions in underperforming categories."
-    ];
+    // Prepare data for OpenAI
+    const analyticsData = {
+      totalProducts: products.length,
+      totalSales,
+      totalRevenue: totalRevenue + purchaseRevenue,
+      bestCategory,
+      bestSellingProduct: bestProduct?.productName || "No inventory data",
+      bestSellingProductSales: bestProduct?.sales || 0,
+      categorySales,
+      customerPurchaseCount: purchases.length,
+      customerPurchaseRevenue: purchaseRevenue,
+      recentCustomerPurchases: purchases.slice(-50),
+      products: products.map((p) => ({
+        productName: p.productName,
+        category: p.category,
+        price: p.price,
+        quantity: p.quantity,
+        sales: p.sales,
+      })),
+    };
 
-    res.json({
+    // Generate AI Insights
+    console.log("Calling Gemini...");
+
+const aiInsight = await generateInsights(analyticsData);
+
+console.log("Gemini Response:");
+console.log(aiInsight);
+
+    res.status(200).json({
       success: true,
-      insights
+      insight: aiInsight,
+      analytics: analyticsData,
     });
 
   } catch (err) {
+    console.error("AI Controller Error:", err);
+
     res.status(500).json({
       success: false,
-      message: err.message
+      message: err.message,
     });
   }
 };
 
 module.exports = {
-  getAIInsights
+  getAIInsights,
 };

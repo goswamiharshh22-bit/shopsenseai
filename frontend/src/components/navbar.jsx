@@ -4,61 +4,34 @@ function Navbar() {
   return (
     <div
       style={{
-        background: "#1F2937",
-        padding: "15px 25px",
-        borderRadius: "15px",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        marginBottom: "30px",
+        background: "#fff",
+        padding: "18px 30px",
+        borderRadius: "15px",
+        marginBottom: "25px",
+        boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
       }}
     >
-      {/* Search Bar */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          background: "#374151",
-          padding: "10px 15px",
-          borderRadius: "10px",
-          width: "350px",
-        }}
-      >
-        <FaSearch color="#9CA3AF" />
-
-        <input
-          type="text"
-          placeholder="Search..."
-          style={{
-            marginLeft: "10px",
-            border: "none",
-            outline: "none",
-            background: "transparent",
-            color: "white",
-            width: "100%",
-          }}
-        />
+      <div>
+        <h2>👋 Welcome Back!</h2>
+        <p style={{ color: "#6b7280" }}>
+          AI Consumer Behaviour Dashboard
+        </p>
       </div>
 
-      {/* Right Side */}
       <div
         style={{
           display: "flex",
           alignItems: "center",
           gap: "25px",
+          fontSize: "22px",
         }}
       >
-        <FaBell
-          color="white"
-          size={20}
-          style={{ cursor: "pointer" }}
-        />
-
-        <FaUserCircle color="#8B5CF6" size={35} />
-
-        <span style={{ color: "white" }}>
-          Harsh
-        </span>
+        <FaSearch />
+        <FaBell />
+        <FaUserCircle size={34} />
       </div>
     </div>
   );

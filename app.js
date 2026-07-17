@@ -1,4 +1,4 @@
-
+const transactionRoutes = require("./routes/transactionRoutes");
 const consumerRoutes = require("./routes/consumerRoutes");
 const express = require("express");
 const cors = require("cors");
@@ -10,11 +10,13 @@ const trendRoutes = require("./routes/trendRoutes");
 const aiRoutes = require("./routes/aiRoutes");
 
 const app = express();
+const predictRoutes = require("./routes/predictRoutes");
 
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
-
+app.use("/api/transactions", transactionRoutes);
+app.use("/api/predict", predictRoutes);
 app.get("/", (req, res) => {
   res.json({
     success: true,

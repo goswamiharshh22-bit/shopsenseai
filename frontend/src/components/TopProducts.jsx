@@ -1,59 +1,48 @@
-const products = [
-  {
-    name: "iPhone 15",
-    sales: 250,
-  },
-  {
-    name: "Nike Shoes",
-    sales: 180,
-  },
-  {
-    name: "Laptop",
-    sales: 140,
-  },
-  {
-    name: "Headphones",
-    sales: 120,
-  },
-];
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-export default function TopProducts() {
+function TopProducts() {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetchTopProducts();
+  }, []);
+
+  const fetchTopProducts = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/dashboard");
+      setProducts(res.data.data.topProducts);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
-    <div
-      style={{
-        background: "#1F2937",
-        borderRadius: "15px",
-        padding: "25px",
-        flex: 1,
-      }}
-    >
-      <h2
-        style={{
-          color: "white",
-          marginBottom: "20px",
-        }}
-      >
-        Top Products
-      </h2>
+    <div className="card" style={{ marginTop: "25px" }}>
+      <h2 style={{ marginBottom: "20px" }}>🏆 Top Selling Products</h2>
 
       <table
         style={{
           width: "100%",
-          color: "white",
+          borderCollapse: "collapse",
         }}
       >
         <thead>
-          <tr>
-            <th align="left">Product</th>
-            <th align="right">Sales</th>
+          <tr style={{ background: "#f5f5f5" }}>
+            <th style={{ padding: "12px" }}>Product</th>
+            <th style={{ padding: "12px" }}>Category</th>
+            <th style={{ padding: "12px" }}>Sales</th>
+            <th style={{ padding: "12px" }}>Price</th>
           </tr>
         </thead>
 
         <tbody>
-          {products.map((p) => (
-            <tr key={p.name}>
-              <td>{p.name}</td>
-              <td align="right">{p.sales}</td>
+          {products.map((product) => (
+            <tr key={product._id}>
+              <td style={{ padding: "12px" }}>{product.productName}</td>
+              <td style={{ padding: "12px" }}>{product.category}</td>
+              <td style={{ padding: "12px" }}>{product.sales}</td>
+              <td style={{ padding: "12px" }}>₹{product.price}</td>
             </tr>
           ))}
         </tbody>
@@ -61,3 +50,5 @@ export default function TopProducts() {
     </div>
   );
 }
+
+export default TopProducts;

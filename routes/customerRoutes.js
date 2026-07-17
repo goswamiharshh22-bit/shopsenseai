@@ -1,11 +1,18 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
+const {
+  seedCustomersFromCSV,
+  getCustomers,
+  createCustomerPurchase,
+} = require('../controllers/customerController');
 
-router.get("/", (req, res) => {
-  res.json({
-    success: true,
-    message: "Customer Route Working"
-  });
-});
+// GET /api/customers
+router.get('/', getCustomers);
+
+// POST /api/customers/seed  -> reads dataset/Mall_Customers.csv and seeds DB
+router.post('/seed', seedCustomersFromCSV);
+
+// POST /api/customers/purchases
+router.post('/purchases', createCustomerPurchase);
 
 module.exports = router;

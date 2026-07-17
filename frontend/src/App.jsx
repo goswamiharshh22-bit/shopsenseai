@@ -1,25 +1,29 @@
+import "./App.css";
+import { Routes, Route } from "react-router-dom";
+
 import Sidebar from "./components/Sidebar";
+
 import Dashboard from "./pages/Dashboard";
+import Customers from "./pages/Customers";
+import Products from "./pages/Products";
+import Analytics from "./pages/Analytics";
+import Insights from "./pages/Insights";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
-    <div
-      style={{
-        display: "flex",
-        minHeight: "100vh",
-        background: "#111827",
-      }}
-    >
+    <div className="app">
       <Sidebar />
 
-      <div
-        style={{
-          flex: 1,
-          marginLeft: "250px",
-          padding: "30px",
-        }}
-      >
-        <Dashboard />
+      <div className="main-content">
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/customers" element={<Customers />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/insights" element={<Insights />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
       </div>
     </div>
   );

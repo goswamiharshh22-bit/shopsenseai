@@ -1,54 +1,61 @@
+ import { useState, useEffect } from "react";
 import {
   LineChart,
   Line,
-  CartesianGrid,
   XAxis,
   YAxis,
   Tooltip,
+  CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { month: "Jan", sales: 400 },
-  { month: "Feb", sales: 600 },
-  { month: "Mar", sales: 800 },
-  { month: "Apr", sales: 700 },
-  { month: "May", sales: 1200 },
-  { month: "Jun", sales: 900 },
-];
+function SalesChart() {
+  const [data, setData] = useState([]);
 
-export default function SalesChart() {
+  useEffect(() => {
+    fetch('/api/trends')
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.success) {
+          const formattedData = result.categorySales.map((item) => ({
+            name: item._id,
+            sales: item.totalSales,
+          }));
+
+          setData(formattedData);
+        }
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
   return (
-    <div
-      style={{
-        background: "#1F2937",
-        marginTop: "30px",
-        borderRadius: "15px",
-        padding: "25px",
-      }}
-    >
-      <h2 style={{ color: "white", marginBottom: "20px" }}>
-        Monthly Sales
+    <div className="bg-white p-6 rounded-lg shadow mt-8">
+      <h2 className="text-xl font-semibold mb-4">
+        Sales by Category
       </h2>
 
-      <ResponsiveContainer width="100%" height={350}>
+      <ResponsiveContainer width="100%" height={300}>
         <LineChart data={data}>
-          <CartesianGrid stroke="#374151" />
+          <CartesianGrid strokeDasharray="3 3" />
 
-          <XAxis dataKey="month" stroke="white" />
+          <XAxis dataKey="name" />
 
-          <YAxis stroke="white" />
+          <YAxis />
 
           <Tooltip />
 
           <Line
             type="monotone"
             dataKey="sales"
-            stroke="#8B5CF6"
+            stroke="#2563eb"
             strokeWidth={3}
+            dot={{ r: 5 }}
+            activeDot={{ r: 8 }}
           />
         </LineChart>
       </ResponsiveContainer>
     </div>
   );
 }
+
+export default SalesChart;

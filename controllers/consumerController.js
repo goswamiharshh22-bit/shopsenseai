@@ -1,84 +1,105 @@
 const Consumer = require("../models/Consumer");
 
-const products = [
-  "iPhone 15",
-  "Samsung S24",
-  "Nike Shoes",
-  "Adidas T-Shirt",
-  "Laptop",
-  "Headphones",
-  "Smart Watch",
-  "Backpack",
-  "Coffee Maker",
-  "Gaming Mouse"
-];
-
-const categories = [
-  "Electronics",
-  "Fashion",
-  "Electronics",
-  "Fashion",
-  "Electronics",
-  "Accessories",
-  "Accessories",
-  "Bags",
-  "Home",
-  "Accessories"
-];
-
-const cities = [
-  "Delhi",
-  "Mumbai",
-  "Lucknow",
-  "Bangalore",
-  "Hyderabad",
-  "Pune",
-  "Jaipur",
-  "Kolkata"
-];
-
-exports.seedData = async (req, res) => {
+// Add Customer
+const addConsumer = async (req, res) => {
   try {
+    const consumer = await Consumer.create(req.body);
 
-    await Consumer.deleteMany();
-
-    let data = [];
-
-    for (let i = 1; i <= 1000; i++) {
-
-      const random = Math.floor(Math.random() * products.length);
-
-      data.push({
-        customerId: "CUS" + i,
-        age: Math.floor(Math.random() * 40) + 18,
-        gender: Math.random() > 0.5 ? "Male" : "Female",
-        city: cities[Math.floor(Math.random() * cities.length)],
-        product: products[random],
-        category: categories[random],
-        quantity: Math.floor(Math.random() * 5) + 1,
-        price: Math.floor(Math.random() * 50000) + 500,
-        purchaseDate: new Date(
-          2025,
-          Math.floor(Math.random() * 12),
-          Math.floor(Math.random() * 28) + 1
-        )
-      });
-
-    }
-
-    await Consumer.insertMany(data);
-
-    res.json({
+    res.status(201).json({
       success: true,
-      message: "1000 Consumer Records Inserted"
+      data: consumer,
     });
-
-  } catch (error) {
-    console.log(error);
-
+  } catch (err) {
     res.status(500).json({
       success: false,
-      message: error.message
+      message: err.message,
     });
   }
+};
+
+// Get All Customers
+const getConsumers = async (req, res) => {
+  try {
+    const consumers = await Consumer.find().sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      data: consumers,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+// Get Single Customer
+const getConsumer = async (req, res) => {
+  try {
+    const consumer = await Consumer.findById(req.params.id);
+
+    if (!consumer) {
+      return res.status(404).json({
+        success: false,
+        message: "Customer not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: consumer,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+// Update Customer
+const updateConsumer = async (req, res) => {
+  try {
+    const consumer = await Consumer.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      data: consumer,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+// Delete Customer
+const deleteConsumer = async (req, res) => {
+  try {
+    await Consumer.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({
+      success: true,
+      message: "Customer deleted successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+module.exports = {
+  addConsumer,
+  getConsumers,
+  getConsumer,
+  updateConsumer,
+  deleteConsumer,
 };

@@ -1,0 +1,81 @@
+.transaction-container{
+    background:#1b1d2b;
+    padding:30px;
+    border-radius:20px;
+    color:white;
+    width:100%;
+    max-width:900px;
+    margin:auto;
+    box-shadow:0 15px 40px rgba(0,0,0,.3);
+}
+
+.transaction-container h2{
+    margin-bottom:25px;
+    text-align:center;
+}
+
+.transaction-form{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.form-group label{
+    margin-bottom:8px;
+    font-size:15px;
+}
+
+.form-group input,
+.form-group select{
+
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#2a2d3f;
+    color:white;
+    font-size:15px;
+}
+
+button{
+
+    grid-column:span 2;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(90deg,#7B2FF7,#A855F7);
+    color:white;
+    font-size:17px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+button:hover{
+
+    transform:scale(1.02);
+
+}
+
+button:disabled {
+    cursor:wait;
+    opacity:.7;
+    transform:none;
+}
+
+.form-status {
+    grid-column:span 2;
+    margin:0;
+    text-align:center;
+}
+
+.form-status.success { color:#86efac; }
+.form-status.error { color:#fca5a5; }
+
+@media (max-width: 640px) {
+    .transaction-form { grid-template-columns:1fr; }
+    button, .form-status { grid-column:span 1; }
+}
