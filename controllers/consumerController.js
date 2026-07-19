@@ -1,4 +1,4 @@
-const Consumer = require("../models/Consumer");
+const Consumer = require("../models/consumer");
 
 // Add Customer
 const addConsumer = async (req, res) => {
