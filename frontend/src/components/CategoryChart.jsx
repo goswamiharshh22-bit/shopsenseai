@@ -20,7 +20,7 @@ function CategoryChart() {
 
   const fetchCategorySales = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/trends");
+      const res = await axios.get("http://https://shopsenseai-tjcz.onrender.com/api/trends");
 
       const formattedData = res.data.categorySales.map((item) => ({
         category: item._id,

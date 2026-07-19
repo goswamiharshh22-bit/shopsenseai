@@ -25,7 +25,7 @@ function DashboardCards() {
   const fetchDashboard = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/dashboard"
+        "http://https://shopsenseai-tjcz.onrender.com/api/dashboard"
       );
 
       setDashboard(res.data.data);
