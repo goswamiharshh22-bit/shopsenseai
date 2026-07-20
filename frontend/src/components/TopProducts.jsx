@@ -10,7 +10,7 @@ function TopProducts() {
 
   const fetchTopProducts = async () => {
     try {
-      const res = await axios.get("http://https://shopsenseai-tjcz.onrender.com/api/dashboard");
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/ai`);
       setProducts(res.data.data.topProducts);
     } catch (err) {
       console.log(err);

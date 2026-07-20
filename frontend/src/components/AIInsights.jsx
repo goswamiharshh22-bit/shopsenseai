@@ -11,7 +11,7 @@ function AIInsights() {
 
   const fetchInsights = async () => {
     try {
-      const res = await axios.get("http://https://shopsenseai-tjcz.onrender.com/api/ai");
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/ai`);
       setInsight(res.data.insight);
     } catch (err) {
       console.log(err);

@@ -10,7 +10,7 @@ function CustomerTable() {
 
   const fetchCustomers = async () => {
     try {
-      const res = await axios.get("http://https://shopsenseai-tjcz.onrender.com/api/consumer");
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/ai`);
       setCustomers(res.data.data);
     } catch (err) {
       console.log(err);
