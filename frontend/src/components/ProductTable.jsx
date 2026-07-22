@@ -4,7 +4,7 @@ function ProductTable() {
 
     useEffect(() => {
         // Fetch product data from the backend API
-            fetch('/api/products')
+            fetch(`${import.meta.env.VITE_API_URL}/api/products`)
             .then((response) => response.json())
             .then((result) => {
                 if (result.success) {
