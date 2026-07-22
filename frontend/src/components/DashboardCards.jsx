@@ -24,7 +24,9 @@ function DashboardCards() {
 
   const fetchDashboard = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/ai`);
+      const res = await axios.get(
+  `${import.meta.env.VITE_API_URL}/api/dashboard`
+);
 
       
 

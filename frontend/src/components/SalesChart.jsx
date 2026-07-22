@@ -13,7 +13,7 @@ function SalesChart() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('/api/trends')
+    fetch(`${import.meta.env.VITE_API_URL}/api/trends`)
       .then((response) => response.json())
       .then((result) => {
         if (result.success) {

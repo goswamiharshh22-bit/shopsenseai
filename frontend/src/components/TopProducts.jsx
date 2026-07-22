@@ -10,7 +10,9 @@ function TopProducts() {
 
   const fetchTopProducts = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/ai`);
+      const res = await axios.get(
+  `${import.meta.env.VITE_API_URL}/api/dashboard`
+);
       setProducts(res.data.data.topProducts);
     } catch (err) {
       console.log(err);

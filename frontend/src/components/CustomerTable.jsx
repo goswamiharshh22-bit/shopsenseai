@@ -10,7 +10,9 @@ function CustomerTable() {
 
   const fetchCustomers = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/ai`);
+      const res = await axios.get(
+  `${import.meta.env.VITE_API_URL}/api/dashboard`
+);
       setCustomers(res.data.data);
     } catch (err) {
       console.log(err);

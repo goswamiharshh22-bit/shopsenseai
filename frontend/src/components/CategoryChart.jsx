@@ -20,7 +20,9 @@ function CategoryChart() {
 
   const fetchCategorySales = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/ai`);
+      const res = await axios.get(
+  `${import.meta.env.VITE_API_URL}/api/dashboard`
+);
 
       const formattedData = res.data.categorySales.map((item) => ({
         category: item._id,
