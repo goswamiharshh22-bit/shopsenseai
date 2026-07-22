@@ -28,7 +28,7 @@ export default function TransactionForm() {
     setStatus({ type: "", message: "" });
 
     try {
-      const response = await fetch("/api/customers/purchases", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/customers/purchases`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
