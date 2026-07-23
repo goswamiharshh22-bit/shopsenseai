@@ -11,11 +11,13 @@ function CustomerTable() {
   const fetchCustomers = async () => {
     try {
       const res = await axios.get(
-  `${import.meta.env.VITE_API_URL}/api/dashboard`
-);
-      setCustomers(res.data.data);
+        `${import.meta.env.VITE_API_URL}/api/dashboard`
+      );
+      const data = res.data?.data;
+      setCustomers(Array.isArray(data) ? data : []);
     } catch (err) {
       console.log(err);
+      setCustomers([]);
     }
   };
 
